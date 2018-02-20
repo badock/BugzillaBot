@@ -9,6 +9,7 @@ import urllib
 from config.config import BUGZILLA_USER, BUGZILLA_PASSWORD
 import mattermost_bot_settings
 import logging
+import unicodedata
 
 from lang.lis import eval, parse
 
@@ -83,7 +84,8 @@ def format_bug(bug_info):
             cpt += 1
 
         response += """\n+----------------------------------"""
-    return response
+    normalized_msg = unicodedata.normalize('NFKD', response).encode('ascii','ignore')
+    return normalized_msg
 
 
 def display_bug(exp):
