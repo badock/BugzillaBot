@@ -1,0 +1,15 @@
+* BugzillaBot
+** Installation
+Create a configuration file based on the template located in etc/bot.conf, and move it to one of the following locations:
+ - ~/bot_bugzilla.conf
+ - /etc/bot_bugzilla.conf
+ - /etc/bot_bugzilla/bot_bugzilla.conf
+
+And set variables related to authentication
+** Usage
+*** Display a bug
+(bug 8520)
+*** View messages attached to a bug
+(bug.msg 8520)
+*** View a list of bugs
+(bug (list 8520 8521 7117)
