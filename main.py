@@ -67,7 +67,7 @@ def get_bug_info(bug_id, with_comments=False):
 
 
 def format_bug(bug_info):
-    response = """\n+-----------------------------------
+    response = u"""\n+-----------------------------------
 | %s: %s (%s)
 +----------------------------------
 | link: %s
@@ -77,13 +77,13 @@ def format_bug(bug_info):
         cpt = 0
         for comment in bug_info["comments"]:
             if cpt > 0:
-                response += "\n|"
-            formatted_comment = ["|   "+ x for x in comment["msg"].split("\n")]
-            response += "\n| <%s> wrote: \n%s" % (comment["author"], "\n".join(formatted_comment))
+                response += u"\n|"
+            formatted_comment = [u"|   "+ x for x in comment["msg"].split("\n")]
+            response += u"\n| <%s> wrote: \n%s" % (comment["author"], "\n".join(formatted_comment))
             cpt += 1
 
-        response += """\n+----------------------------------"""
-    return response
+        response += u"""\n+----------------------------------"""
+    return response.encode("utf8")
 
 
 def display_bug(exp):
