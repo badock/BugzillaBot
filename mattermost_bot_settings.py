@@ -5,3 +5,5 @@ BOT_URL = load_config().get("mattermost").get("url")
 BOT_LOGIN = load_config().get("mattermost").get("login")
 BOT_PASSWORD = load_config().get("mattermost").get("password")
 BOT_TEAM = load_config().get("mattermost").get("team")
+
+IGNORE_NOTIFIES = ['@channel', '@all', '@here']
