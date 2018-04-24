@@ -10,6 +10,7 @@ from config.config import BUGZILLA_USER, BUGZILLA_PASSWORD
 import mattermost_bot_settings
 import logging
 import unicodedata
+import traceback
 
 from lang.lis import eval, parse
 
@@ -145,5 +146,13 @@ if __name__ == "__main__":
         'level': logging.DEBUG,
         'stream': sys.stdout,
     })
+    while True:
+        try:
+            print("(Re)Starting the bot")
+            Bot().run()
+        except:
+            print("I have encountered the following error:")
+            traceback.print_exc()
+            print("I will restart")
+            
 
-    Bot().run()

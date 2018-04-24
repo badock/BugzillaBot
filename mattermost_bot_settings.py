@@ -7,3 +7,4 @@ BOT_PASSWORD = load_config().get("mattermost").get("password")
 BOT_TEAM = load_config().get("mattermost").get("team")
 
 IGNORE_NOTIFIES = ['@channel', '@all', '@here']
+DEFAULT_REPLY = "I didn't understand your message"
