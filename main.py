@@ -52,19 +52,39 @@ def get_bug_info(bug_id, with_comments=False):
             comments = get_bug_comments(bug_id)
         else:
             comments = []
+
+        bug_severity = "?"
+        if len(bug_candidate.get("severity").split(":")) > 0:
+            bug_severity = bug_candidate.get("severity").split(":")[0]
+
+        email = bug_candidate.get("assigned_to")
+        bug_firstname = email
+        if "@" in email:
+            short_email = email.split("@")[0]
+            if "." in short_email:
+                firstname = short_email.split(".")[0].capitalize()
+                bug_firstname = firstname
         return {
             "title": bug_candidate.get("summary"),
             "url": "https://intranet.grid5000.fr/bugzilla/show_bug.cgi?id=%s" % bug_id,
             "id": bug_candidate.get("id"),
             "status": bug_candidate.get("status"),
-            "comments": comments
+            "comments": comments,
+            "assignee": bug_candidate.get("assigned_to"),
+            "severity": bug_severity,
+            "component": bug_candidate.get("component"),
+            "bug_firstname" : bug_firstname
         }
     return {
         "title": "Did not found any bug with ID=%s :-(" % bug_id,
         "url": "https://intranet.grid5000.fr/bugzilla/show_bug.cgi?id=%s" % bug_id,
         "id": bug_id,
         "status": "Bug not found",
-        "comments": "No comments"
+        "comments": "No comments",
+        "assignee": "nobody",
+        "severity": "unknown",
+        "component": "NA",
+        "bug_firstname": "NA"
     }
 
 
@@ -89,6 +109,23 @@ def format_bug(bug_info):
     return normalized_msg
 
 
+def format_action(bug_info):
+    response = """\n{{Bug|[%s](%s)}}: %s (S:%s, C:%s, A:%s)""" % (bug_info["id"], bug_info["url"], bug_info["title"], bug_info["severity"], bug_info["component"], bug_info["bug_firstname"])
+
+    if len(bug_info["comments"]) > 0:
+        cpt = 0
+        for comment in bug_info["comments"]:
+            if cpt > 0:
+                response += "\n|"
+            formatted_comment = ["|   "+ x for x in comment["msg"].split("\n")]
+            response += "\n| <%s> wrote: \n%s" % (comment["author"], "\n".join(formatted_comment))
+            cpt += 1
+
+        response += """\n+----------------------------------"""
+    normalized_msg = unicodedata.normalize('NFKD', response).encode('ascii','ignore')
+    return normalized_msg
+
+
 def display_bug(exp):
     result = eval(parse(exp))
     reply_msgs = []
@@ -97,6 +134,17 @@ def display_bug(exp):
     for bug_id in result:
         bug_info = get_bug_info(bug_id, with_comments=False)
         reply_msgs += [format_bug(bug_info)]
+    return reply_msgs
+
+
+def display_action(exp):
+    result = eval(parse(exp))
+    reply_msgs = []
+    if not isinstance(result, (list, tuple)):
+        result = [result]
+    for bug_id in result:
+        bug_info = get_bug_info(bug_id, with_comments=False)
+        reply_msgs += [format_action(bug_info)]
     return reply_msgs
 
 
@@ -135,6 +183,20 @@ def respond_bug(message, bug_id):
 @listen_to('\(bug (.*)\)')
 def listen_bug(message, bug_id):
     reply_msgs = display_bug(bug_id)
+    for msg in reply_msgs:
+        message.reply(msg)
+
+
+@respond_to('\(action (.*)\)')
+def respond_action(message, bug_id):
+    reply_msgs = display_action(bug_id)
+    for msg in reply_msgs:
+        message.reply(msg)
+
+
+@listen_to('\(action (.*)\)')
+def listen_action(message, bug_id):
+    reply_msgs = display_action(bug_id)
     for msg in reply_msgs:
         message.reply(msg)
 
