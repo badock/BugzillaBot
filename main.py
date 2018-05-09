@@ -175,14 +175,14 @@ def listen_messages(message, bug_id):
 
 @respond_to('\(bug (.*)\)')
 def respond_bug(message, bug_id):
-    reply_msgs = display_bug(bug_id)
+    reply_msgs = display_action(bug_id)
     for msg in reply_msgs:
         message.reply(msg)
 
 
 @listen_to('\(bug (.*)\)')
 def listen_bug(message, bug_id):
-    reply_msgs = display_bug(bug_id)
+    reply_msgs = display_action(bug_id)
     for msg in reply_msgs:
         message.reply(msg)
 
