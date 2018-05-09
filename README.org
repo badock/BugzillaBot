@@ -1,11 +1,39 @@
 * BugzillaBot
 ** Installation
-Create a configuration file based on the template located in etc/bot.conf, and move it to one of the following locations:
+BugzillaBot requires few dependencies:
+- python
+- python-pip
+
+To install python libraries needed by the bot, run the following command:
+: pip install -r requirements.txt
+** Configuration
+Create a configuration file based on the template located in etc/bot_bugzilla.conf, and move it to one of the following locations:
  - ~/bot_bugzilla.conf
  - /etc/bot_bugzilla.conf
  - /etc/bot_bugzilla/bot_bugzilla.conf
 
-And set variables related to authentication
+And set variables related to authentication:
+: [mattermost]
+: ssl_verify = True
+: url = https://framateam.org/api/v3
+: login = _________      # Create a user on the framateam website
+: password = _________
+: team = grid5000
+:
+: [bugzilla]
+: user = _________     # G5K username
+: password = _________ # G5K password
+** Run the bot
+: python main.py
+** Add the bot to a channel
+First, click on the members icon on the right of the channel's name, then click on *Manage members*:
+[[screenshot1][https://raw.githubusercontent.com/badock/BugzillaBot/master/screenshots/screenshot1.png]]
+
+Then click on /Add new members/:
+[[screenshot2][https://raw.githubusercontent.com/badock/BugzillaBot/master/screenshots/screenshot2.png]]
+
+Then write /bugzilla/ on the search bar, select the /bugzillabot/ member and click on *Add*:
+[[screenshot3][https://raw.githubusercontent.com/badock/BugzillaBot/master/screenshots/screenshot3.png]]
 ** Usage
 *** Display a bug
 : (bug 8520)
@@ -13,3 +41,8 @@ And set variables related to authentication
 : (bug.msg 8520)
 *** View a list of bugs
 : (bug (list 8520 8521 7117)
+*** View a bug as an action
+: (action 8520)
+** Customize the bot
+You can tweak the bot by changing variables in the following file:
+[[https://github.com/badock/BugzillaBot/blob/master/mattermost_bot_settings.py]]
