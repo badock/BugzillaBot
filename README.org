@@ -41,8 +41,6 @@ Then write /bugzilla/ on the search bar, select the /bugzillabot/ member and cli
 : (bug.msg 8520)
 *** View a list of bugs
 : (bug (list 8520 8521 7117)
-*** View a bug as an action
-: (action 8520)
 ** Customize the bot
 You can tweak the bot by changing variables in the following file:
 [[https://github.com/badock/BugzillaBot/blob/master/mattermost_bot_settings.py]]
