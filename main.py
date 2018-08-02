@@ -1,13 +1,13 @@
 import sys
-from mattermost_bot.bot import respond_to
-from mattermost_bot.bot import listen_to
-from mattermost_bot.bot import Bot
+from mmpy_bot.bot import respond_to
+from mmpy_bot.bot import listen_to
+from mmpy_bot.bot import Bot
 import requests
 import json
 from requests.auth import HTTPBasicAuth
 import urllib
 from config.config import BUGZILLA_USER, BUGZILLA_PASSWORD
-import mattermost_bot_settings
+import mmpy_bot_settings
 import logging
 import unicodedata
 import traceback
@@ -64,6 +64,14 @@ def get_bug_info(bug_id, with_comments=False):
             if "." in short_email:
                 firstname = short_email.split(".")[0].capitalize()
                 bug_firstname = firstname
+
+        # Prevent a bug causing the display of bug related to all
+        # sites to trigger a notification '@all' to anyone who has
+        # configured Mattermost language to be english.
+        component = bug_candidate.get("component")
+        if "All sites" in component:
+            component = component.replace("All sites", "AllSites")
+
         return {
             "title": bug_candidate.get("summary"),
             "url": "https://intranet.grid5000.fr/bugzilla/show_bug.cgi?id=%s" % bug_id,
@@ -72,7 +80,7 @@ def get_bug_info(bug_id, with_comments=False):
             "comments": comments,
             "assignee": bug_candidate.get("assigned_to"),
             "severity": bug_severity,
-            "component": bug_candidate.get("component"),
+            "component": component,
             "bug_firstname" : bug_firstname
         }
     return {
@@ -187,18 +195,18 @@ def listen_bug(message, bug_id):
         message.reply(msg)
 
 
-@respond_to('\(action (.*)\)')
-def respond_action(message, bug_id):
-    reply_msgs = display_action(bug_id)
-    for msg in reply_msgs:
-        message.reply(msg)
+# @respond_to('\(action (.*)\)')
+# def respond_action(message, bug_id):
+#     reply_msgs = display_action(bug_id)
+#     for msg in reply_msgs:
+#         message.reply(msg)
 
 
-@listen_to('\(action (.*)\)')
-def listen_action(message, bug_id):
-    reply_msgs = display_action(bug_id)
-    for msg in reply_msgs:
-        message.reply(msg)
+# @listen_to('\(action (.*)\)')
+# def listen_action(message, bug_id):
+#     reply_msgs = display_action(bug_id)
+#     for msg in reply_msgs:
+#         message.reply(msg)
 
 
 if __name__ == "__main__":
