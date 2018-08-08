@@ -16,7 +16,7 @@ Create a configuration file based on the template located in etc/bot_bugzilla.co
 And set variables related to authentication:
 : [mattermost]
 : ssl_verify = True
-: url = https://framateam.org/api/v3
+: url = https://framateam.org/api/v4
 : login = _________      # Create a user on the framateam website
 : password = _________
 : team = grid5000
