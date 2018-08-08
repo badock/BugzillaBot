@@ -220,6 +220,8 @@ if __name__ == "__main__":
         try:
             print("(Re)Starting the bot")
             Bot().run()
+        except (KeyboardInterrupt, SystemExit):
+            raise
         except:
             print("I have encountered the following error:")
             traceback.print_exc()
