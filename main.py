@@ -24,11 +24,11 @@ def get_bug_comments(bug_id):
     }])
     params_str_encoded = urllib.quote_plus(params_str)
 
-    url = "https://intranet.grid5000.fr/bugzilla/jsonrpc.cgi?method=Bug.comments&params=%s" % params_str_encoded
+    url = "http://bugzilla-dev.lille.grid5000.fr/bugzilla/jsonrpc.cgi?method=Bug.comments&params=%s" % params_str_encoded
     comments_response = requests.get(url,
-                            auth=HTTPBasicAuth(BUGZILLA_USER, BUGZILLA_PASSWORD))
+                            auth=HTTPBasicAuth(BUGZILLA_USER, BUGZILLA_PASSWORD), verify=False)
     comments_raw = comments_response.json().get("result", {}).get("bugs", {}).get("%s" % bug_id, {}).get("comments")
-    comments = [{"author": x.get("author", "unknown"), "msg": x.get("text", "no text")} for x in comments_raw]
+    comments = [{"creator": x.get("creator", "unknown"), "msg": x.get("text", "no text")} for x in comments_raw]
 
     return comments
 
@@ -41,9 +41,9 @@ def get_bug_info(bug_id, with_comments=False):
     }])
     params_str_encoded = urllib.quote_plus(params_str)
 
-    url = "https://intranet.grid5000.fr/bugzilla/jsonrpc.cgi?method=Bug.search&params=%s" % params_str_encoded
+    url = "http://bugzilla-dev.lille.grid5000.fr/bugzilla/jsonrpc.cgi?method=Bug.search&params=%s" % params_str_encoded
     bug_response = requests.get(url,
-                            auth=HTTPBasicAuth(BUGZILLA_USER, BUGZILLA_PASSWORD))
+                            auth=HTTPBasicAuth(BUGZILLA_USER, BUGZILLA_PASSWORD), verify=False)
 
     bug_candidates = bug_response.json().get("result", {}).get("bugs", [])
 
@@ -74,7 +74,7 @@ def get_bug_info(bug_id, with_comments=False):
 
         return {
             "title": bug_candidate.get("summary"),
-            "url": "https://intranet.grid5000.fr/bugzilla/show_bug.cgi?id=%s" % bug_id,
+            "url": "http://bugzilla-dev.lille.grid5000.fr/bugzilla/show_bug.cgi?id=%s" % bug_id,
             "id": bug_candidate.get("id"),
             "status": bug_candidate.get("status"),
             "comments": comments,
@@ -85,7 +85,7 @@ def get_bug_info(bug_id, with_comments=False):
         }
     return {
         "title": "Did not found any bug with ID=%s :-(" % bug_id,
-        "url": "https://intranet.grid5000.fr/bugzilla/show_bug.cgi?id=%s" % bug_id,
+        "url": "htts://bugzilla-dev.lille.grid5000.fr/bugzilla/show_bug.cgi?id=%s" % bug_id,
         "id": bug_id,
         "status": "Bug not found",
         "comments": "No comments",
@@ -109,7 +109,7 @@ def format_bug(bug_info):
             if cpt > 0:
                 response += "\n|"
             formatted_comment = ["|   "+ x for x in comment["msg"].split("\n")]
-            response += "\n| <%s> wrote: \n%s" % (comment["author"], "\n".join(formatted_comment))
+            response += "\n| <%s> wrote: \n%s" % (comment["creator"], "\n".join(formatted_comment))
             cpt += 1
 
         response += """\n+----------------------------------"""
@@ -126,7 +126,7 @@ def format_action(bug_info):
             if cpt > 0:
                 response += "\n|"
             formatted_comment = ["|   "+ x for x in comment["msg"].split("\n")]
-            response += "\n| <%s> wrote: \n%s" % (comment["author"], "\n".join(formatted_comment))
+            response += "\n| <%s> wrote: \n%s" % (comment["creator"], "\n".join(formatted_comment))
             cpt += 1
 
         response += """\n+----------------------------------"""
@@ -224,5 +224,3 @@ if __name__ == "__main__":
             print("I have encountered the following error:")
             traceback.print_exc()
             print("I will restart")
-            
-
