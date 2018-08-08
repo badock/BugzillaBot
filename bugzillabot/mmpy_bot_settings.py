@@ -1,4 +1,7 @@
-from config.loader import load_config
+try:
+    from config.loader import load_config
+except ImportError:
+    from bugzillabot.config.loader import load_config
 
 SSL_VERIFY = True if load_config().get("mattermost").get("ssl_verify") is "yes" else False
 BOT_URL = load_config().get("mattermost").get("url")

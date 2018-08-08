@@ -1,11 +1,12 @@
 * BugzillaBot
 ** Installation
 BugzillaBot requires few dependencies:
-- python
+- python2
 - python-pip
+- setuptools (via pip)
 
-To install python libraries needed by the bot, run the following command:
-: pip install -r requirements.txt
+To install the bot, run the following command:
+: python ./setup.py install
 ** Configuration
 Create a configuration file based on the template located in etc/bot_bugzilla.conf, and move it to one of the following locations:
  - ~/bot_bugzilla.conf
@@ -24,7 +25,7 @@ And set variables related to authentication:
 : user = _________     # G5K username
 : password = _________ # G5K password
 ** Run the bot
-: python main.py
+: bugzillabot
 ** Add the bot to a channel
 First, click on the members icon on the right of the channel's name, then click on *Manage members*:
 [[screenshot1][https://raw.githubusercontent.com/badock/BugzillaBot/master/screenshots/screenshot1.png]]

@@ -11,7 +11,6 @@ import mmpy_bot_settings
 import logging
 import unicodedata
 import traceback
-
 from lang.lis import eval, parse
 
 
@@ -209,7 +208,7 @@ def listen_bug(message, bug_id):
 #         message.reply(msg)
 
 
-if __name__ == "__main__":
+def startbot():
     logging.basicConfig(**{
         'format': '[%(asctime)s] %(message)s',
         'datefmt': '%m/%d/%Y %H:%M:%S',

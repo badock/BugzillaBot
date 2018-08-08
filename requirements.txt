@@ -1,3 +1,0 @@
-mmpy_bot
-urllib3
-requests
