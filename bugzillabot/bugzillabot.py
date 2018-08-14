@@ -23,7 +23,7 @@ def get_bug_comments(bug_id):
     }])
     params_str_encoded = urllib.quote_plus(params_str)
 
-    url = "http://bugzilla-dev.lille.grid5000.fr/bugzilla/jsonrpc.cgi?method=Bug.comments&params=%s" % params_str_encoded
+    url = "https://intranet.grid5000.fr/bugzilla/jsonrpc.cgi?method=Bug.comments&params=%s" % params_str_encoded
     comments_response = requests.get(url,
                             auth=HTTPBasicAuth(BUGZILLA_USER, BUGZILLA_PASSWORD), verify=False)
     comments_raw = comments_response.json().get("result", {}).get("bugs", {}).get("%s" % bug_id, {}).get("comments")
@@ -40,7 +40,7 @@ def get_bug_info(bug_id, with_comments=False):
     }])
     params_str_encoded = urllib.quote_plus(params_str)
 
-    url = "http://bugzilla-dev.lille.grid5000.fr/bugzilla/jsonrpc.cgi?method=Bug.search&params=%s" % params_str_encoded
+    url = "https://intranet.grid5000.fr/bugzilla/jsonrpc.cgi?method=Bug.search&params=%s" % params_str_encoded
     bug_response = requests.get(url,
                             auth=HTTPBasicAuth(BUGZILLA_USER, BUGZILLA_PASSWORD), verify=False)
 
@@ -73,7 +73,7 @@ def get_bug_info(bug_id, with_comments=False):
 
         return {
             "title": bug_candidate.get("summary"),
-            "url": "http://bugzilla-dev.lille.grid5000.fr/bugzilla/show_bug.cgi?id=%s" % bug_id,
+            "url": "https://intranet.grid5000.fr/bugzilla/show_bug.cgi?id=%s" % bug_id,
             "id": bug_candidate.get("id"),
             "status": bug_candidate.get("status"),
             "comments": comments,
@@ -84,7 +84,7 @@ def get_bug_info(bug_id, with_comments=False):
         }
     return {
         "title": "Did not found any bug with ID=%s :-(" % bug_id,
-        "url": "htts://bugzilla-dev.lille.grid5000.fr/bugzilla/show_bug.cgi?id=%s" % bug_id,
+        "url": "https://intranet.grid5000.fr/bugzilla/show_bug.cgi?id=%s" % bug_id,
         "id": bug_id,
         "status": "Bug not found",
         "comments": "No comments",

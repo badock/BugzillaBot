@@ -7,6 +7,9 @@ BugzillaBot requires few dependencies:
 
 To install the bot, run the following command:
 : python ./setup.py install
+
+To generate the deb package:
+: python setup.py --command-packages=stdeb.command bdist_deb
 ** Configuration
 Create a configuration file based on the template located in etc/bot_bugzilla.conf, and move it to one of the following locations:
  - ~/bot_bugzilla.conf
