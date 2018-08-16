@@ -12,6 +12,7 @@ import logging
 import unicodedata
 import traceback
 from lang.lis import eval, parse
+import re
 
 
 def get_bug_comments(bug_id):
@@ -180,18 +181,28 @@ def listen_messages(message, bug_id):
         message.reply(msg)
 
 
-@respond_to('\(bug (.*)\)')
+@respond_to('\(bug ([0-9].+)\)')
 def respond_bug(message, bug_id):
-    reply_msgs = display_action(bug_id)
-    for msg in reply_msgs:
-        message.reply(msg)
+    bug_pattern = r'\(bug [0-9]+\)'
+    matches = re.findall(bug_pattern, message.body[u'data'][u'post'][u'message'])
+
+    for match in matches:
+        current_bug_id = match.replace("bug ", "").replace("(", "").replace(")", "")
+        reply_msgs = display_action(current_bug_id)
+        for msg in reply_msgs:
+            message.reply(msg)
 
 
-@listen_to('\(bug (.*)\)')
+@listen_to('\(bug ([0-9].+)\)')
 def listen_bug(message, bug_id):
-    reply_msgs = display_action(bug_id)
-    for msg in reply_msgs:
-        message.reply(msg)
+    bug_pattern = r'\(bug [0-9]+\)'
+    matches = re.findall(bug_pattern, message.body[u'data'][u'post'][u'message'])
+
+    for match in matches:
+        current_bug_id = match.replace("bug ", "").replace("(", "").replace(")", "")
+        reply_msgs = display_action(current_bug_id)
+        for msg in reply_msgs:
+            message.reply(msg)
 
 
 # @respond_to('\(action (.*)\)')
